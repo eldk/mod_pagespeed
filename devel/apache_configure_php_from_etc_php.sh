@@ -13,12 +13,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-# Script to enable PHP5 in Apache assuming it has already been installed into
+# Script to enable PHP in Apache assuming it has already been installed into
 # the standard Ubuntu directory (/etc/apache, /usr/apache) rather than the
 # ~/apache2 directory we use [in other words, modules have been apt install'd
 # rather than built from source].
 #
-# PHP5 can be installed using the following commands:
+# PHP can be installed using the following commands:
 #  apt-get install php5-common php5
 #  apt-get install php5-cgi php5-cli libapache2-mod-fcgid # * worker MPM only *
 #
@@ -36,8 +36,8 @@ if [ -z "${APACHE_ROOT}" ]; then
 fi
 
 HTTPD_CONF=${APACHE_ROOT}/conf/httpd.conf
-DST_PHP5_CONFIG=${APACHE_ROOT}/conf/php7.2.conf
-DST_PHP5_MODULE=${APACHE_ROOT}/modules/libphp7.2.so
+DST_PHP_CONFIG=${APACHE_ROOT}/conf/php7.2.conf
+DST_PHP_MODULE=${APACHE_ROOT}/modules/libphp7.2.so
 DST_FCGID_CONFIG=${APACHE_ROOT}/conf/fcgid.conf
 DST_FCGID_MODULE=${APACHE_ROOT}/modules/mod_fcgid.so
 
@@ -48,15 +48,15 @@ WS="[ 	]"
 grep -q "^${WS}*Include${WS}.*conf/php7.2.conf${WS}*$" "${HTTPD_CONF}" && \
 grep -q "^${WS}*Include${WS}.*conf/fcgid.conf${WS}*$" "${HTTPD_CONF}"
 if [[ $? -eq 0 && \
-     -r "${DST_PHP5_CONFIG}" && \
-     -r "${DST_PHP5_MODULE}" && \
+     -r "${DST_PHP_CONFIG}" && \
+     -r "${DST_PHP_MODULE}" && \
      -r "${DST_FCGID_MODULE}" ]]; then
   exit 0
 fi
 
 # Hardwire where we get things from since it's a Ubuntu standard.
-SRC_PHP5_INIDIR=/etc/php/7.2/apache2/
-SRC_PHP5_MODULE=/usr/lib/apache2/modules/libphp7.2.so
+SRC_PHP_INIDIR=/etc/php/7.2/apache2/
+SRC_PHP_MODULE=/usr/lib/apache2/modules/libphp7.2.so
 
 # We want our own build of fcgid since we want to test with 2.2, while the
 # packages are for 2.4
@@ -66,7 +66,7 @@ SRC_FCGID_MODULE=${APACHE_ROOT}/modules/mod_fcgid-src_build.so
 
 if [[ ! -r "/usr/bin/php-cgi" ||
       ! -r "${SRC_FCGID_MODULE}" ]]; then
-  echo "*** PHP5 is not installed, or is not installed where we expect" >&2
+  echo "*** PHP is not installed, or is not installed where we expect" >&2
   echo "    under /etc/php5 and /usr/lib/apache2. Please run:"          >&2
   echo "        sudo apt-get install php5-common php5"                  >&2
   echo "        sudo apt-get install php5-cgi php5-cli libapache2-mod-fcgid">&2
@@ -131,14 +131,14 @@ EOF
 fi
 
 # Copy the config files over as necessary.
-if [ ! -f "${DST_PHP5_CONFIG}" ]; then
-  cat - > "${DST_PHP5_CONFIG}" <<EOF
+if [ ! -f "${DST_PHP_CONFIG}" ]; then
+  cat - > "${DST_PHP_CONFIG}" <<EOF
 <IfModule php5_module>
   AddHandler php5-script .php
   DirectoryIndex index.html index.php
   AddType text/html .php
   AddType application/x-httpd-php-source phps
-  PHPIniDir ${SRC_PHP5_INIDIR}
+  PHPIniDir ${SRC_PHP_INIDIR}
 </IfModule>
 EOF
 fi
@@ -155,8 +155,8 @@ EOF
 fi
 
 # Link the modules as necessary.
-if [[ ! -f "${DST_PHP5_MODULE}" && -f "${SRC_PHP5_MODULE}" ]]; then
-  ln -s "${SRC_PHP5_MODULE}" "${DST_PHP5_MODULE}"
+if [[ ! -f "${DST_PHP_MODULE}" && -f "${SRC_PHP_MODULE}" ]]; then
+  ln -s "${SRC_PHP_MODULE}" "${DST_PHP_MODULE}"
 fi
 if [ ! -f "${DST_FCGID_MODULE}" ]; then
   ln -s "${SRC_FCGID_MODULE}" "${DST_FCGID_MODULE}"

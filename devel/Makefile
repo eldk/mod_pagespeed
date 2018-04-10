@@ -613,7 +613,7 @@ apache_install_conf : setup_doc_root
 	$(DEVEL_DIR)/apache_configure_https_port.sh $(APACHE_DEBUG_ROOT) \
 	                                            $(APACHE_HTTPS_PORT)
 	$(DEVEL_DIR)/apache_create_server_certificate.sh $(APACHE_DEBUG_ROOT)
-	$(DEVEL_DIR)/apache_configure_php5_from_etc_php5.sh $(APACHE_DEBUG_ROOT)
+	$(DEVEL_DIR)/apache_configure_php_from_etc_php.sh $(APACHE_DEBUG_ROOT)
 	$(DEVEL_DIR)/apache_install.sh \
 		$(APACHE_DEBUG_ROOT) $(APACHE_PORT) $(GIT_SRC)
 
