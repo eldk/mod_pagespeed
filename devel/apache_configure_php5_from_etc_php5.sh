@@ -27,14 +27,17 @@
 #
 # usage: apache_configure_php5_from_etc_php5.sh apache-root-directory
 APACHE_ROOT=$1
+
+echo "Apache root : ${APACHE_ROOT}"
+
 if [ -z "${APACHE_ROOT}" ]; then
   echo "Usage: $0 <apache-root-directory>"
   exit 1
 fi
 
 HTTPD_CONF=${APACHE_ROOT}/conf/httpd.conf
-DST_PHP5_CONFIG=${APACHE_ROOT}/conf/php5.conf
-DST_PHP5_MODULE=${APACHE_ROOT}/modules/libphp5.so
+DST_PHP5_CONFIG=${APACHE_ROOT}/conf/php7.2.conf
+DST_PHP5_MODULE=${APACHE_ROOT}/modules/libphp7.2.so
 DST_FCGID_CONFIG=${APACHE_ROOT}/conf/fcgid.conf
 DST_FCGID_MODULE=${APACHE_ROOT}/modules/mod_fcgid.so
 
@@ -42,7 +45,7 @@ DST_FCGID_MODULE=${APACHE_ROOT}/modules/mod_fcgid.so
 WS="[ 	]"
 
 # Early exit if everything seems to be installed already.
-grep -q "^${WS}*Include${WS}.*conf/php5.conf${WS}*$" "${HTTPD_CONF}" && \
+grep -q "^${WS}*Include${WS}.*conf/php7.2.conf${WS}*$" "${HTTPD_CONF}" && \
 grep -q "^${WS}*Include${WS}.*conf/fcgid.conf${WS}*$" "${HTTPD_CONF}"
 if [[ $? -eq 0 && \
      -r "${DST_PHP5_CONFIG}" && \
@@ -52,8 +55,8 @@ if [[ $? -eq 0 && \
 fi
 
 # Hardwire where we get things from since it's a Ubuntu standard.
-SRC_PHP5_INIDIR=/etc/php5/apache2
-SRC_PHP5_MODULE=/usr/lib/apache2/modules/libphp5.so
+SRC_PHP5_INIDIR=/etc/php/7.2/apache2/
+SRC_PHP5_MODULE=/usr/lib/apache2/modules/libphp7.2.so
 
 # We want our own build of fcgid since we want to test with 2.2, while the
 # packages are for 2.4
@@ -61,7 +64,7 @@ SRC_FCGID_MODULE=${APACHE_ROOT}/modules/mod_fcgid-src_build.so
 
 # Bail if PHP5 isn't installed [where we expect it].
 
-if [[ ! -r "/usr/bin/php5-cgi" ||
+if [[ ! -r "/usr/bin/php-cgi" ||
       ! -r "${SRC_FCGID_MODULE}" ]]; then
   echo "*** PHP5 is not installed, or is not installed where we expect" >&2
   echo "    under /etc/php5 and /usr/lib/apache2. Please run:"          >&2
