@@ -19,7 +19,6 @@ if echo "$HOSTNAME" | grep "^localhost:"; then
     NON_LOCAL_IP=$( \
       ifconfig | egrep -o 'inet addr:[0-9]+.[0-9]+.[0-9]+.[0-9]+' | \
       awk -F: '{print $2}' | grep -v ^127 | head -n 1)
-
     # Make sure pagespeed is listening on NON_LOCAL_IP.
     URL="http://$NON_LOCAL_IP:$(echo $HOSTNAME | sed s/^localhost://)/"
     URL+="mod_pagespeed_example/styles/"
