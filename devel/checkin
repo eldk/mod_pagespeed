@@ -60,9 +60,10 @@ if ! locale -a | grep -q tr_TR.utf8; then
   FAIL=true
 fi
 
-if [ ! -f /usr/bin/php5-cgi ]; then
-  echo "You are missing php5. Type:"
-  echo "sudo apt-get install php5-cgi"
+if [ ! -f /usr/bin/php5-cgi ] && [ ! -f /usr/bin/php-cgi ]; then
+  echo "You are missing php. Type:"
+  echo "before Ubuntu 16.04 : sudo apt-get install php5-cgi"
+  echo "Ubuntu 16.04 : sudo apt-get install php-cgi"
   FAIL=true
 fi
 
