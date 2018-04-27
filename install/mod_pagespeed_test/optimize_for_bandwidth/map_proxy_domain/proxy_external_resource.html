@@ -1,0 +1,30 @@
+<!-- This example demonstrates proxying & optimizing a resource served
+     on another domain -->
+
+<!--
+   Example image proxied and optimized.  This image is a 1x1
+   transparent image stored on Google's static content server for the
+   benefit of lazyload_images.
+-->
+<img src="http://www.gstatic.com/psa/static/1.gif"/>
+<!--
+   Example image not proxyed because included in inline javascript
+-->
+<script>
+    var img = document.createElement('img');
+    img.src = 'http://www.gstatic.com/psa/static/1.gif';
+    document.body.appendChild(img);
+    // Will not be map_proxyed
+</script>
+<!--
+   Example local image included in javascript and optimized
+-->
+<!--<img src="images/Puzzle.jpg"/>-->
+<script>
+    var img = document.createElement('img');
+    img.src = 'images/Puzzle.jpg';
+    img.width=256;
+    img.height=256;
+    document.body.appendChild(img);
+    // Will be optimized
+</script>
