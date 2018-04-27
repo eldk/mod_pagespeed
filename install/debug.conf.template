@@ -1462,6 +1462,10 @@ ModPagespeedCreateSharedMemoryMetadataCache "@@MOD_PAGESPEED_CACHE@@_noned_shmm"
   <Directory "@@APACHE_DOC_ROOT@@/mod_pagespeed_test/optimize_for_bandwidth/core_filters" >
     ModPagespeedRewriteLevel CoreFilters
   </Directory>
+  <Directory "@@APACHE_DOC_ROOT@@/mod_pagespeed_test/optimize_for_bandwidth/map_proxy_domain" >
+    ModPagespeedMapProxyDomain http://localhost:@@APACHE_SECONDARY_PORT@@/psa/static \
+                           http://www.gstatic.com/psa/static
+  </Directory>
 </VirtualHost>
 
 <VirtualHost localhost:@@APACHE_SECONDARY_PORT@@>
